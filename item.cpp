@@ -7,7 +7,6 @@ Item::Item(int id, int uP) : weight(0), ID(id) {
     throw std::invalid_argument(
         "Количество затрачиваемых TP должно быть положительным. Попробуйте еще "
         "раз.");
-  usedPoint = uP;
 }
 
 void Item::set_weight(double val) {
