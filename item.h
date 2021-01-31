@@ -69,9 +69,9 @@ class Item {
   virtual std::ostream& print(std::ostream&) const noexcept;
 
  private:
-  int                     usedPoint_;
-  double              weight_;
-  int                     ID_;
+  int                    usedPoint_;
+  double                 weight_;
+  int                    ID_;
 };
 
 }  // namespace xcom
