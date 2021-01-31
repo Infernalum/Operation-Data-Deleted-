@@ -20,7 +20,7 @@ class Item {
    * деструкторов базовых классов */
   /* Копирующие/перемещающие конструкторы по умолчанию */
 
-  Item(int id = 1, int uP = 1);
+  Item(const int id = 1,const  int uP = 1);
 
   virtual ~Item() = default;
 
