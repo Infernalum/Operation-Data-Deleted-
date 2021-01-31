@@ -5,14 +5,8 @@
 
 #include <iostream>
 
+#include "constants.h"
 namespace xcom {
-
-/* Перечисление возможных ID предметов*/
-enum ItemID {
-    ID_AMMOBOX = 1,
-    ID_FIRSTAIDKIT,
-    ID_WEAPON
-};
 
 class Item {
  public:
@@ -20,7 +14,8 @@ class Item {
    * деструкторов базовых классов */
   /* Копирующие/перемещающие конструкторы по умолчанию */
 
-  Item(const int id = 1,const  int uP = 1);
+     Item(const int ID =constatnts::defaultItemID, const int usedPoint = constatnts::defaultItemUsedPoint);
+
 
   virtual ~Item() = default;
 
@@ -69,11 +64,11 @@ class Item {
   virtual std::ostream& print(std::ostream&) const noexcept;
 
  private:
-  int                    usedPoint_;
-  double                 weight_;
-  int                    ID_;
+  int usedPoint_;
+  double weight_;
+  int ID_;
 };
 
 }  // namespace xcom
 
-#endif  // !_ITEM_H_
+#endif  // !__ITEM_H_INCLUDED__

@@ -2,20 +2,20 @@
 
 namespace xcom {
 
-Item::Item(int id, int uP) : weight_(0), ID_(id) {
-  if (uP < 1)
-    throw std::invalid_argument(
-        "Количество затрачиваемых TP должно быть положительным. Попробуйте еще "
-        "раз.");
-  usedPoint_ = uP;
+Item::Item(const int ID, const int usedPoint) : weight_(0), ID_(ID) {
+  if (usedPoint > 0) {
+    usedPoint_ = usedPoint;
+  } else {
+      throw std::invalid_argument(constatnts::exceptionItemTP);
+  }
 }
 
 Item& Item::setUsedPoint(const int usedPoint) {
-  if (usedPoint < 1)
-    throw std::invalid_argument(
-        "Кол-во расходных очков времени должно быть положительным. Попробуйте "
-        "еще раз.");
-  usedPoint_ = usedPoint;
+  if (usedPoint > 0) {
+    usedPoint_ = usedPoint;
+  } else {
+      throw std::invalid_argument(constatnts::exceptionItemTP);
+  }
   return *this;
 }
 
