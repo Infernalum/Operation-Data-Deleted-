@@ -2,41 +2,36 @@
 
 namespace xcom {
 
-Item::Item(int id, int uP) : weight(0), ID(id) {
+Item::Item(int id, int uP) : weight_(0), ID_(id) {
   if (uP < 1)
     throw std::invalid_argument(
         "Количество затрачиваемых TP должно быть положительным. Попробуйте еще "
         "раз.");
+  usedPoint_ = uP;
 }
 
-void Item::set_weight(double val) {
-  if (val < 0)
-    throw std::invalid_argument(
-        "Вес предмета не может быть отрицательным. Попробуйте еще раз.");
-  weight = val;
-}
-
-void Item::set_usedPoint(int uP) {
-  if (uP < 1)
+Item& Item::setUsedPoint(const int usedPoint) {
+  if (usedPoint < 1)
     throw std::invalid_argument(
         "Кол-во расходных очков времени должно быть положительным. Попробуйте "
         "еще раз.");
-  usedPoint = uP;
+  usedPoint_ = usedPoint;
+  return *this;
 }
 
 std::ostream& Item::print(std::ostream& os) const noexcept {
-  os << weight << " кг; TP: " << usedPoint << "; ";
+  os << weight_ << " кг; TP: " << usedPoint_ << "; ";
   return os;
 }
 
 std::ostream& Item::save(std::ostream& os) const noexcept {
-  os.write((char*)&ID, sizeof(ID));
-  os.write((char*)&usedPoint, sizeof(usedPoint));
+  os.write((char*)&ID_, sizeof(ID_));
+  os.write((char*)&usedPoint_, sizeof(usedPoint_));
   return os;
 }
 
 std::istream& Item::load(std::istream& is) noexcept {
-  is.read((char*)&usedPoint, sizeof(usedPoint));
+  is.read((char*)&usedPoint_, sizeof(usedPoint_));
   return is;
 }
 

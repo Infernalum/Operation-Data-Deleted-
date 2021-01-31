@@ -1,5 +1,5 @@
-#ifndef ITEM_H
-#define ITEM_H
+#ifndef __ITEM_H_INCLUDED___
+#define __ITEM_H_INCLUDED__
 
 #include <stdio.h>
 
@@ -7,80 +7,71 @@
 
 namespace xcom {
 
-/* Перечисление типов предметов*/
-enum ItemID { ITEMID_AMMOBOX = 1, ITEMID_FIRSTAIDKIT, ITEMID_WEAPON };
+/* Перечисление возможных ID предметов*/
+enum ItemID {
+    ID_AMMOBOX = 1,
+    ID_FIRSTAIDKIT,
+    ID_WEAPON
+};
 
-// Базовый абстрактный класс "Предмет"
 class Item {
-  /* Кол-во очков, которые нужно потратить, чтобы заюзать предмет (выстрелить,
-   * захилиться, перезарядиться и тд) */
-  int usedPoint;
-
-  /* Вес предмета (считается отдельно, т.к. для аптечки и оружейного ящика (да и
-   * для оружия) вес высчитывается с учетом сотояния дочерних классов */
-  double weight;
-
-  /* Идентификатор предмета (см. enum в классе "Level") */
-  int ID;
-
- protected:
-  virtual std::ostream& print(std::ostream&) const noexcept;
-
  public:
   /* Правило: никогда не вызывать виртуальные функции в теле конструкторов или
    * деструкторов базовых классов */
-
   /* Копирующие/перемещающие конструкторы по умолчанию */
 
-  /* Единственный конструктор */
   Item(int id = 1, int uP = 1);
 
-  /* Виртуальный деструктор */
-  virtual ~Item(){};
+  virtual ~Item() = default;
 
-  double get_weight() const noexcept { return weight; };
-  int get_usedPoint() const noexcept { return usedPoint; };
-  char get_ID() const noexcept { return ID; };
-
-  /********************************************************/
-  /*						Сеттеры
-   */
-  /********************************************************/
-
-  // Изменение веса предмета (для каждого типа предмета свой метод подсчета
-  // веса, а это служит только для явной переустановки)
-  virtual void set_weight(double);
+  inline auto getWeight() const noexcept { return weight_; };
+  inline auto getUsedPoint() const noexcept { return usedPoint_; };
+  inline auto getID() const noexcept { return ID_; };
 
   /*
-      Использование предемета.
-  Для оружейного ящика: вытащить n патронов из ящика; в случае, если в ящике
-  меньше патронов, вытаскивается кол-во, которое можно забрать Для аптечки:
-  использовать аптечку (после использования аптечка удаляется) Для оружия:
-  выстрелить 1-им патроном. Вычисляется шанс попадания для расстояния в n клеток
+   Пересчет веса предмета: для каждого типа предмета свой метод подсчета веса
+ */
+  virtual Item& computeWeight() = 0;
+
+  Item& setUsedPoint(const int usedPoint);
+
+  virtual Item& usingItem() = 0;
+
+  /*
+   Вывод базовой информации о предмете (не для сохранения в файл, а вывода в
+   выходной поток)
   */
-  virtual int using_item(int) = 0;
-
-  void set_usedPoint(int);
-
-  /********************************************************/
-  /*					Остальные методы
-   */
-  /********************************************************/
-
-  // Вывод базовой информации о предмете (не для сохранения в файл)
-  friend std::ostream& operator<<(std::ostream& os, const Item& item) noexcept {
+  inline friend std::ostream& operator<<(std::ostream& os,
+                                         const Item& item) noexcept {
     return item.print(os);
   };
 
-  // Виртуальный метод сохранения базовой информации о предмете в бинарный файл:
-  // 'used_points'_'weight'_
+  /*
+   Виртуальный метод сохранения базовой информации о предмете в бинарный файл:
+   usedPoint_ + weight_ */
   virtual std::ostream& save(std::ostream&) const noexcept;
 
-  // Виртуальный метод загрузки базовой информации о предмете из бинарного файла
+  /*
+   Виртуальный метод загрузки базовой информации о предмете из бинарного файла:
+   UsedPoint_ + weight_
+  */
   virtual std::istream& load(std::istream&) noexcept;
 
-  // Создание копии предмета
   virtual Item* clone() const noexcept = 0;
+
+ protected:
+  /*
+  Установка веса предмета через базовый класс. Доступ к нему из вне класса
+  иметь нельзя
+ */
+  Item& setWeight(const double);
+
+  virtual std::ostream& print(std::ostream&) const noexcept;
+
+ private:
+  int                     usedPoint_;
+  double              weight_;
+  int                     ID_;
 };
 
 }  // namespace xcom
