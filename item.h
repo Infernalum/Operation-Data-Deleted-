@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-#include "constants.h"
+#include "Constants.h"
 namespace xcom {
 
 class Item {
@@ -14,8 +14,8 @@ class Item {
    * деструкторов базовых классов */
   /* Копирующие/перемещающие конструкторы по умолчанию */
 
-     Item(const int ID =constatnts::defaultItemID, const int usedPoint = constatnts::defaultItemUsedPoint);
-
+  Item(const int ID = constatnts::itemDefaultID,
+       const int usedPoint = constatnts::itemDefaultUsedPoint);
 
   virtual ~Item() = default;
 

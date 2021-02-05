@@ -3,18 +3,18 @@
 namespace xcom {
 
 Item::Item(const int ID, const int usedPoint) : weight_(0), ID_(ID) {
-  if (usedPoint > 0) {
+  if (usedPoint >= 0) {
     usedPoint_ = usedPoint;
   } else {
-      throw std::invalid_argument(constatnts::exceptionItemTP);
+    throw std::invalid_argument(constatnts::itemExceptionTP);
   }
 }
 
 Item& Item::setUsedPoint(const int usedPoint) {
-  if (usedPoint > 0) {
+  if (usedPoint >= 0) {
     usedPoint_ = usedPoint;
   } else {
-      throw std::invalid_argument(constatnts::exceptionItemTP);
+    throw std::invalid_argument(constatnts::itemExceptionTP);
   }
   return *this;
 }
