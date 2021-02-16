@@ -1,14 +1,6 @@
 #include "item.h"
 
-namespace xcom {
-
-Item::Item(const int ID, const int usedPoint) : weight_(0), ID_(ID) {
-  if (usedPoint >= 0) {
-    usedPoint_ = usedPoint;
-  } else {
-    throw std::invalid_argument(constatnts::itemExceptionTP);
-  }
-}
+namespace items {
 
 Item& Item::setUsedPoint(const int usedPoint) {
   if (usedPoint >= 0) {
@@ -19,8 +11,29 @@ Item& Item::setUsedPoint(const int usedPoint) {
   return *this;
 }
 
+Item& Item::setCurQty(const int curQty) {
+    if (curQty < 0)
+        throw std::invalid_argument(constatnts::AmmoBoxExceptionQty);
+    if (curQty > maxQty_)
+        curQty_ = maxQty_;
+    curQty_ = curQty;
+    computeWeight();
+    return *this;
+}
+
+Item& Item::setMaxQty(const int maxQty) {
+    if (maxQty < 0)
+        throw std::invalid_argument(constatnts::AmmoBoxExceptionMaxQty);
+    maxQty_ = maxQty;
+    if (curQty_ > maxQty_) {
+        curQty_ = maxQty_;
+        computeWeight();
+    }
+    return *this;
+}
+
 std::ostream& Item::print(std::ostream& os) const noexcept {
-  os << weight_ << " кг; TP: " << usedPoint_ << "; ";
+  os << weight_ << " kg.; TP: " << usedPoint_ << "; ";
   return os;
 }
 
